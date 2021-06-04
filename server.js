@@ -1,8 +1,11 @@
 const express = require("express");
 const morgan = require('morgan');
+const { 
+	connectToDB
+} = require('./lib/mongo');
 const api = require('./api');
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8008;
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -15,6 +18,10 @@ app.use('*', function (req, res, next) {
 		error: "Requested resource " + req.originalUrl + " does not exist"
 	});
 });
-app.listen(port,function() {
-	console.log("== server started on port:",port);
+
+connectToDB(() => {
+	console.log(__dirname);
+	app.listen(port, () => {
+	 	console.log("== Server is running on port", port);
+	});
 });
