@@ -1,0 +1,6 @@
+{
+	"name": "tomato",
+	"version": "1.0.0",
+	"description": "A youtube clone api.",
+	"main": "server.js"
+  }
