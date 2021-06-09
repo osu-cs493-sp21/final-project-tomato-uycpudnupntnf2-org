@@ -1,7 +1,7 @@
 use mango
 db.createUser({
-	user:"yourUserNameHere",
-	pwd:"yourPasswordHere",
+	user:"noelle",
+	pwd:"FiveTails",
 	roles:[
 		{
 			role:"readWrite",

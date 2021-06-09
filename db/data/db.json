@@ -1,11 +1,27 @@
 {
 	"users"   :[
-		
+		{
+			"email":"noelle@mail.com",
+			"name":"noelle",
+			"pass":"FiveTails",
+			"birth":"10/31/1995"
+		}
 	],
 	"videos"  :[
-		
+		{
+			"userid":"0000",
+			"likes":0,
+			"thumbnail":"/data/files/notthere.png",
+			"file":"/data/files/notthere.mp4",
+			"length":120
+		}
 	],
 	"comments":[
-		
+		{
+			"userid":"0000",
+			"videoid":"0000",
+			"text":"this video doesn't work!",
+			"likes":0
+		}
 	]
 }
