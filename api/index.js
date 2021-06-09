@@ -1,4 +1,5 @@
 const router = module.exports = require('express').Router();
+router.use('/users', require('./users'))
 
 // DELETE ME BEFORE FINAL SUBMISSION
 const dbcall = require('../db/dbCall');
