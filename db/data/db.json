@@ -5,15 +5,29 @@
 			"name":"noelle",
 			"pass":"FiveTails",
 			"birth":"10/31/1995"
+		},
+		{
+			"email":"venti@mail.com",
+			"name":"Venti",
+			"pass":"ventiPassword",
+			"birth":"3/4/2000"
 		}
 	],
 	"videos"  :[
 		{
 			"userid":"0000",
+			"descriptions": "A funny video",
 			"likes":0,
 			"thumbnail":"/data/files/notthere.png",
 			"file":"/data/files/notthere.mp4",
 			"length":120
+		},{
+			"userid":"0000",
+			"descriptions": "A dog video",
+			"likes":2,
+			"thumbnail":"/data/files/dog.png",
+			"file":"/data/files/dog.mp4",
+			"length":300
 		}
 	],
 	"comments":[
@@ -22,6 +36,11 @@
 			"videoid":"0000",
 			"text":"this video doesn't work!",
 			"likes":0
+		},{
+			"userid":"0001",
+			"videoid":"0001",
+			"text":"Cute!",
+			"likes":1
 		}
 	]
 }
