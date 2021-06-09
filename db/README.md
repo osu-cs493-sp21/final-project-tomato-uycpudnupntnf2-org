@@ -8,7 +8,7 @@
 The first thing that you need to do is initialize a docker container
 for the database. You can do this using the provided file:
 
-`saynotodockercompose2021.sh`
+`dbdockerinit.sh`
 
 When you run this it will create a new docker container for: the mongodb
 a rabbitmq server, as well as a network to connect them together.
@@ -48,7 +48,7 @@ You may now exit the mongoshell and continue.
 # logging on to the db:
 The provided file:
 
-`dockercomposesux4thisproject.sh`
+`tomato.sh`
 
 Is all that is needed to start the server with the appropriate environment
 variables. Be sure to change the `MONGO_USER` and `MONGO_PASSWORD` lines

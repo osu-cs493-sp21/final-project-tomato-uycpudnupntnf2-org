@@ -6,6 +6,7 @@ router.get("/dbtest",async function(req,res,next) {
 	const result = await dbcall.getUserByEmail("noelle@mail.com");
 	console.log("result",result);
 	res.status(201).send({
-		result:"the query was completed!"
+		note:"the query was completed!",
+		result:result
 	});
 });
