@@ -157,7 +157,7 @@ async function getCByV(videoid) {
 }
 // ************************************************************
 // Update functions
-// 0/3 complete
+// 0/4 complete
 // ************************************************************
 
 // ************************************************************
@@ -186,6 +186,8 @@ exports.getCommentsByVideo = getCByV;  // get comments with videoid
 exports.updateVideo        = null; // update a video object in db
 exports.updateComment      = null; // update a comment object in db
 exports.updateUser         = null; // update a user object in db
+exports.subUser            = null; // subscribe a user to a user
+exports.unsubUser          = null; // unsubscribe a user to a user
 // deletes
 exports.deleteUser         = null; // delete a user object from db
 exports.deleteVideo        = null; // delete a video object from db
