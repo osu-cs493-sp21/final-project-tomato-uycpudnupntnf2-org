@@ -5,53 +5,55 @@ const val   = require('../lib/validation');
 async function getUserCount() {
 	const db = mango.getDBReference();
 	const collection = db.collection('users');
-	return await collection.count();
+	return await collection.countDocuments();
 }
 async function getVideoCount() {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
-	return await collection.count();
+	return await collection.countDocuments();
 }
 async function getCommentCount() {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
-	return await collection.count();
+	return await collection.countDocuments();
 }
+
 async function insertU(user) {
 	const db = mango.getDBReference();
 	const collection = db.collection('users');
 	user = val.extractValidFields(user,val.userschema);
-	user._id = new ObjectId(getUserCount());
-	const result = collection.insertOne(user)
-	console.log('insert result:',result);
+	user._id = new ObjectId(await getUserCount());
+	const result = await collection.insertOne(user)
+	console.log('insert result:',result[0]);
 	return result;
 }
 async function insertC(comment) {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
 	comment = val.extractValidFields(comment,val.commentschema);
-	comment._id = new ObjectId(getCommentCount());
-	const result = collection.insertOne(comment)
-	console.log('insert result:',result);
+	comment._id = new ObjectId(await getCommentCount());
+	const result = await collection.insertOne(comment)
+	console.log('insert result:',result[0]);
 	return result;
 }
 async function insertV(video) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
 	video = val.extractValidFields(video,val.videoschema);
-	video._id = new ObjectId(getVideoCount());
+	video._id = new ObjectId(await getVideoCount());
 	const result = await collection.insertOne(video)
-	console.log('insert result:',result);
+	console.log('get result:',result[0]);
 	return result;
 }
+
 async function getUById(id) {
 	const db = mango.getDBReference();
 	const collection = db.collection('users');
 	if(ObjectId.isValid(id)) {
-		const result = collection.find({
+		const result = await collection.find({
 			_id: id
 		}).toArray();
-		console.log('insert result:',result[0]);
+		console.log('get result:',result[0]);
 		return result[0];
 	}
 	else {
@@ -64,17 +66,17 @@ async function getUByE(useremail) {
 	const result = await collection.find({
 		email: useremail
 	}).toArray();
-	console.log('insert result:',result[0]);
+	console.log('get result:',result[0]);
 	return result[0];
 }
 async function getVById(id) {
 	const db = mango.getDBReference();
 	const collection = db.collection('video');
 	if(ObjectId.isValid(id)) {
-		const result = collection.find({
+		const result = await collection.find({
 			_id: id
 		}).toArray();
-		console.log('insert result:',result[0]);
+		console.log('get result:',result[0]);
 		return result[0];
 	}
 	else {
@@ -88,13 +90,14 @@ async function getCById(id) {
 		const result = await collection.find({
 			_id: id
 		}).toArray();
-		console.log('insert result:',result[0]);
+		console.log('get result:',result[0]);
 		return result[0];
 	}
 	else {
 		return null;
 	}
 }
+
 async function getUV(userid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
