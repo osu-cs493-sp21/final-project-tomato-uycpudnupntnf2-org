@@ -15,14 +15,14 @@
 	],
 	"videos"  :[
 		{
-			"userid":"0000",
-			"descriptions": "A funny video",
+			"userid":0,
+			"descriptions": "A complete fabrication",
 			"likes":0,
-			"thumbnail":"/data/files/notthere.png",
-			"file":"/data/files/notthere.mp4",
+			"thumbnail":"/data/files/false.png",
+			"file":"/data/files/wemadeitup.mp4",
 			"length":120
 		},{
-			"userid":"0000",
+			"userid":0,
 			"descriptions": "A dog video",
 			"likes":2,
 			"thumbnail":"/data/files/dog.png",
@@ -32,13 +32,13 @@
 	],
 	"comments":[
 		{
-			"userid":"0000",
-			"videoid":"0000",
+			"userid":0,
+			"videoid":0,
 			"text":"this video doesn't work!",
 			"likes":0
 		},{
-			"userid":"0001",
-			"videoid":"0001",
+			"userid":1,
+			"videoid":1,
 			"text":"Cute!",
 			"likes":1
 		}

@@ -9,14 +9,12 @@ mango.connectToDB(async () => {
 	const dbvjson = dbjson.videos;
 	const dbcjson = dbjson.comments
 	for(c = 0;c < dbujson.length;c++) {
-		// print(dbujson[c]);
 		await dbcall.insertUser(dbujson[c]);
 	}
 	const user = await dbcall.getUserByEmail("noelle@mail.com");
 	if(user) {
 		for(c = 0;c < dbvjson.length;c++) {
 			dbvjson[c].userid = user._id;
-			// print(dbvjson[c]);
 			await dbcall.insertVideo(dbvjson[c]);
 		}
 		const videos = await dbcall.getUserVideos(user._id);
@@ -25,7 +23,6 @@ mango.connectToDB(async () => {
 			for(c = 0;c < dbcjson.length;c++) {
 				dbcjson[c].userid = user._id;
 				dbcjson[c].videoid = video._id;
-				// print(dbcjson[c]);
 				await dbcall.insertComment(dbcjson[c]);
 			}
 		}

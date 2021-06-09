@@ -1,9 +1,11 @@
 # This is the database for our project:
+>Table of Contents:
 >1. initializing the database.
 >2. creating your user.
 >3. logging on to the db.
 >4. initializing the db.
 >5. the database and you.
+---
 ### Initializing the database:
 The first thing that you need to do is initialize a docker container
 for the database. You can do this using the provided file:
@@ -50,19 +52,13 @@ The provided file:
 
 >`tomato.sh`
 
-Is all that is needed to start the server with the appropriate environment
-variables. Be sure to change the `MONGO_USER` and `MONGO_PASSWORD` lines
-to the user and pwd you used when creating the user in mongoshell.
+Is all that is needed to start the server with the appropriate environment variables. Be sure to change the `MONGO_USER` and `MONGO_PASSWORD` lines to the user and pwd you used when creating the user in mongoshell.
 ### Initializing the db:
 To initialize the db all that is needed is for you to run the provided file:
 
 >`dbinit.sh`
 
-This file sets the appropriate environment variables and starts `dbinit.js`
-which will load the json data from `data/db.json` into the database.
-ONLY RUN THIS ONCE! If this is ran multiple times, there will be duplicate
-database entries, and you will have to delete the docker container and volume,
-and then restart this process from step 1.
+This file sets the appropriate environment variables and starts `dbinit.js` which will load the json data from `data/db.json` into the database. ONLY RUN THIS ONCE! If this is ran multiple times, there will be duplicate database entries, and you will have to delete the docker container and volume, and then restart this process from step 1.
 # The database and you:
 There are several mongodb functions that you can use to interact with the database.
 

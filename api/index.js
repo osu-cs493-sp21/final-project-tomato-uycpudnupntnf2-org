@@ -3,9 +3,10 @@ router.use('/users', require('./users'))
 
 // DELETE ME BEFORE FINAL SUBMISSION
 const dbcall = require('../db/dbCall');
+print = dbcall.print;
 router.get("/dbtest",async function(req,res,next) {
 	const result = await dbcall.getUserByEmail("noelle@mail.com");
-	console.log("result",result);
+	print("email",result);
 	res.status(201).send({
 		note:"the query was completed!",
 		result:result

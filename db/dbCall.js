@@ -145,7 +145,7 @@ async function getUC(userid) {
 async function getCByV(videoid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
-	if(ObjectId.isValid(userid)) {
+	if(ObjectId.isValid(videoid)) {
 		const result = await collection.find({
 			videoid: videoid
 		}).toArray();
@@ -167,14 +167,13 @@ async function getCByV(videoid) {
 
 // ************************************************************
 // The exports for all the db calls
-// 10/16 complete
+// 10/18 complete
 // ************************************************************
 
-// inserts
 exports.insertUser         = insertU;  // insert a user
 exports.insertComment      = insertC;  // insert a comment
 exports.insertVideo        = insertV;  // insert a video
-// gets
+
 exports.getUserById        = getUById; // get user by userid
 exports.getUserByEmail     = getUByE;  // get user by email
 exports.getVideoById       = getVById; // get video by videoid
@@ -182,15 +181,15 @@ exports.getCommentById     = getCById; // get comment by commentid
 exports.getUserVideos      = getUV;    // get videos with userid
 exports.getUserComments    = getUC;    // get comments with userid
 exports.getCommentsByVideo = getCByV;  // get comments with videoid
-// updates
+
 exports.updateVideo        = null; // update a video object in db
 exports.updateComment      = null; // update a comment object in db
 exports.updateUser         = null; // update a user object in db
 exports.subUser            = null; // subscribe a user to a user
 exports.unsubUser          = null; // unsubscribe a user to a user
-// deletes
+
 exports.deleteUser         = null; // delete a user object from db
 exports.deleteVideo        = null; // delete a video object from db
 exports.deleteComment      = null; // delete a comment object from db
-// print
+
 exports.print              = console.log; // Because typing console.log is too long
