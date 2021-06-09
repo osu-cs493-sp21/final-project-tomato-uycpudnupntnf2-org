@@ -96,17 +96,21 @@ async function getCommentsByVideo(id) {
 	return null;
 }
 // inserts
-exports.insertUser         = null;
-exports.insertComment      = null;
-exports.insertVideo        = null;
+exports.insertUser         = null; // 
+exports.insertComment      = null; // 
+exports.insertVideo        = null; // 
 // gets
-exports.getUserById        = null;
-exports.getVideoById       = null;
-exports.getCommentById     = null;
-exports.getUserVideos      = null;
-exports.getUserComments    = null;
-exports.getCommentsByVideo = null;
+exports.getUserById        = null; // 
+exports.getVideoById       = null; // 
+exports.getCommentById     = null; // 
+exports.getUserVideos      = null; // 
+exports.getUserComments    = null; // 
+exports.getCommentsByVideo = null; // 
 // updates
-exports.updateVideo        = null;
-exports.updateComment      = null;
-exports.updateUser         = null;
+exports.updateVideo        = null; // 
+exports.updateComment      = null; // 
+exports.updateUser         = null; // 
+// deletes
+exports.deleteUser         = null; // 
+exports.deletevideo        = null; // 
+exports.deleteComment      = null; // 

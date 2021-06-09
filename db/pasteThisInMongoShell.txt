@@ -1,0 +1,11 @@
+use mango
+db.createUser({
+	user:"yourUserNameHere",
+	pwd:"yourPasswordHere",
+	roles:[
+		{
+			role:"readWrite",
+			db:"mango"
+		}
+	]
+})
