@@ -96,7 +96,7 @@ async function getVById(id) {
 		const result = await collection.find({
 			_id: new ObjectId(id)
 		}).toArray();
-		// console.log(result[0]);
+
 		return result[0];
 	}
 	else {
