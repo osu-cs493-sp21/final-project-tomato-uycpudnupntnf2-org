@@ -157,7 +157,7 @@ async function getCByV(videoid) {
 }
 // ************************************************************
 // Update functions
-// 0/5 complete
+// 5/5 complete
 // ************************************************************
 async function updateV(videoid,video)     {
 	const db = mango.getDBReference();
@@ -236,7 +236,7 @@ async function usubU  (userid,subid)      {
 }
 // ************************************************************
 // Delete functions
-// 0/3 complete
+// 3/3 complete
 // ************************************************************
 async function delU(userid) {
 	const db = mango.getDBReference();
@@ -264,7 +264,7 @@ async function delV(videoid) {
 }
 // ************************************************************
 // The exports for all the db calls
-// 10/18 complete
+// 18/18 complete
 // ************************************************************
 
 exports.insertUser         = insertU;  // insert a user
