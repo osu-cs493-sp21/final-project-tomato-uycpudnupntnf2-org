@@ -1,5 +1,7 @@
 const router = module.exports = require('express').Router();
-router.use('/users', require('./users'))
+
+router.use('/users', require('./users'));
+router.use('/videos',require('./videos').router);
 
 // DELETE ME BEFORE FINAL SUBMISSION
 const dbcall = require('../db/dbCall');
