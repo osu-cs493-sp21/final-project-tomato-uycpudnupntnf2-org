@@ -89,7 +89,7 @@ async function getVById(id) {
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: new ObjectId(id)
+			_id: id
 		}).toArray();
 		// console.log(result[0]);
 		return result[0];
@@ -157,14 +157,111 @@ async function getCByV(videoid) {
 }
 // ************************************************************
 // Update functions
-// 0/4 complete
+// 0/5 complete
 // ************************************************************
-
+async function updateV(videoid,video)     {
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	const validdoc = val.extractValidFields(video,val.videoschema);
+	const result = await collection.updateOne(
+		{ _id:videoid },
+		validdoc
+	).toArray();
+	return result.result;
+}
+async function updateC(commentid,comment) {
+	const db = mango.getDBReference();
+	const collection = db.collection('comments');
+	const validdoc = val.extractValidFields(comment,val.commentschema);
+	const result = await collection.updateOne(
+		{ _id:commentid },
+		validdoc
+	).toArray();
+	return result.result;
+}
+async function updateU(userid,user)       {
+	const db = mango.getDBReference();
+	const collection = db.collection('users');
+	const validdoc = val.extractValidFields(user,val.userschema);
+	const result = await collection.updateOne(
+		{ _id:userid },
+		validdoc
+	).toArray();
+	return result.result;
+}
+async function subU   (userid,subid)      {
+	const db = mango.getDBReference();
+	const collection = db.collection('users');
+	if(ObjectId.isValid(userid)) {
+		const user = await collection.find({ 
+			_id = userid 
+		}).toArray();
+		if(!user[0].subs) {
+			user[0].subs = [];
+		}
+		user[0].subs.push(subid);
+		const result = await collection.updateOne(
+			{ _id:userid },
+			{$set:{subs:user[0].subs}}
+		).toArray();
+		return result.result;
+	}
+	else {
+		return null;
+	}
+}
+async function usubU  (userid,subid)      {
+	const db = mango.getDBReference();
+	const collection = db.collection('users');
+	if(ObjectId.isValid(userid)) {
+		const user = await collection.find({ 
+			_id = userid 
+		}).toArray();
+		if(!user[0].subs) {
+			user[0].subs = [];
+		}
+		const idx = user[0].subs.indexOf(subid);
+		if(idx > -1) {
+			user[0].subs.remove(idx);
+		}
+		const result = await collection.updateOne(
+			{ _id:userid },
+			{$set:{subs:user[0].subs}}
+		).toArray();
+		return result.result;
+	}
+	else {
+		return null;
+	}
+}
 // ************************************************************
 // Delete functions
 // 0/3 complete
 // ************************************************************
-
+async function delU(userid) {
+	const db = mango.getDBReference();
+	const collection = db.collection('users');
+	const result = await collection.updateOne({ 
+		_id:videoid 
+	}).toArray();
+	return result.result;
+}
+async function delC(commentid) {
+	const db = mango.getDBReference();
+	const collection = db.collection('comments');
+	const result = await collection.updateOne({ 
+		_id:videoid 
+	}).toArray();
+	return result.result;
+}
+async function delV(videoid) {
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	const result = await collection.updateOne({ 
+		_id:videoid 
+	}).toArray();
+	return result.result;
+}
 // ************************************************************
 // The exports for all the db calls
 // 10/18 complete
@@ -182,14 +279,14 @@ exports.getUserVideos      = getUV;    // get videos with userid
 exports.getUserComments    = getUC;    // get comments with userid
 exports.getCommentsByVideo = getCByV;  // get comments with videoid
 
-exports.updateVideo        = null; // update a video object in db
-exports.updateComment      = null; // update a comment object in db
-exports.updateUser         = null; // update a user object in db
-exports.subUser            = null; // subscribe a user to a user
-exports.unsubUser          = null; // unsubscribe a user to a user
+exports.updateVideo        = updateV;  // update a video object in db
+exports.updateComment      = updateC;  // update a comment object in db
+exports.updateUser         = updateU;  // update a user object in db
+exports.subUser            = subU;     // subscribe a user to a user
+exports.unsubUser          = usubU;    // unsubscribe a user to a user
 
-exports.deleteUser         = null; // delete a user object from db
-exports.deleteVideo        = null; // delete a video object from db
-exports.deleteComment      = null; // delete a comment object from db
+exports.deleteUser         = delU; // delete a user object from db
+exports.deleteVideo        = delV; // delete a video object from db
+exports.deleteComment      = delC; // delete a comment object from db
 
 exports.print              = console.log; // Because typing console.log is too long
