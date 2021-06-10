@@ -15,6 +15,7 @@ mango.connectToDB(async () => {
 	if(user) {
 		for(c = 0;c < dbvjson.length;c++) {
 			dbvjson[c].userid = user._id;
+			dbvjson[c].timestamp = Date.now();
 			await dbcall.insertVideo(dbvjson[c]);
 		}
 		const videos = await dbcall.getUserVideos(user._id);
@@ -23,6 +24,7 @@ mango.connectToDB(async () => {
 			for(c = 0;c < dbcjson.length;c++) {
 				dbcjson[c].userid = user._id;
 				dbcjson[c].videoid = video._id;
+				dbcjson[c].timestamp = Date.now();
 				await dbcall.insertComment(dbcjson[c]);
 			}
 		}

@@ -89,7 +89,7 @@ async function getVById(id) {
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: id
+			_id: new ObjectId(id)
 		}).toArray();
 		// console.log(result[0]);
 		return result[0];
