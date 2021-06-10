@@ -1,4 +1,5 @@
-const { ObjectId } = require('mongodb');
+const e = require('express');
+const { ObjectId, ObjectID } = require('mongodb');
 const mango = require('../lib/mango');
 const val   = require('../lib/validation');
 // DB CALLS
@@ -55,7 +56,11 @@ async function insertV(video) {
 	video._id = new ObjectId(await getVideoCount());
 	console.log(video._id);
 	const result = await collection.insertOne(video);
-	return result.result;
+	//console.log("after insert:", result.result)
+	return {
+		result: result.result,
+		_id: video._id
+	};
 }
 // ************************************************************
 // Get document functions
@@ -157,17 +162,66 @@ async function getCByV(videoid) {
 }
 // ************************************************************
 // Update functions
-// 0/4 complete
+// 1/4 complete
 // ************************************************************
+async function updateVideo(id, video){
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	videoValues = val.extractValidFields(video, val.videoschema);
+
+	const result = await collection.replaceOne(
+		{ _id: new ObjectID(id) },
+		videoValues
+	);
+	return result.matchedCount > 0;
+}
+
 
 // ************************************************************
 // Delete functions
-// 0/3 complete
+// 1/3 complete
 // ************************************************************
+async function deleteVideoById(id){
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	const result = await collection.deleteOne({
+		_id: new ObjectID(id)
+	});
+	return result.deletedCount > 0;
+}
+
+
+// ************************************************************
+// other help functions
+// 1/1 complete
+// ************************************************************	
+async function likeVideo(id, fieldValue){
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+
+	if(ObjectId.isValid(id)) {
+		const result = await collection.find({
+			_id: new ObjectId(id)
+		}).toArray();	
+		
+		if(result[0].likes){
+			fieldValue.likes = result[0].likes + parseInt(fieldValue.likes);
+		}
+		console.log(fieldValue);
+		const newResult = await collection.updateOne(
+			{ _id: new ObjectID(id)},
+			{ $set: fieldValue}
+		);
+		//console.log(newResult)
+		return newResult.matchedCount > 0;
+	}else{
+		return null;
+	}
+}
 
 // ************************************************************
 // The exports for all the db calls
-// 10/18 complete
+// 11/20 complete
 // ************************************************************
 
 exports.insertUser         = insertU;  // insert a user
@@ -182,14 +236,15 @@ exports.getUserVideos      = getUV;    // get videos with userid
 exports.getUserComments    = getUC;    // get comments with userid
 exports.getCommentsByVideo = getCByV;  // get comments with videoid
 
-exports.updateVideo        = null; // update a video object in db
+exports.updateVideo        = updateVideo; // update a video object in db
 exports.updateComment      = null; // update a comment object in db
 exports.updateUser         = null; // update a user object in db
 exports.subUser            = null; // subscribe a user to a user
 exports.unsubUser          = null; // unsubscribe a user to a user
 
 exports.deleteUser         = null; // delete a user object from db
-exports.deleteVideo        = null; // delete a video object from db
+exports.deleteVideo        = deleteVideoById; // delete a video object from db
 exports.deleteComment      = null; // delete a comment object from db
 
+exports.likeVideo		   = likeVideo; // modify like or dislike videos
 exports.print              = console.log; // Because typing console.log is too long
