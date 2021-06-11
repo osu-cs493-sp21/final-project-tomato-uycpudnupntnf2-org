@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getCommentById, getCommentsByVideo, deleteComment, likeComment } = require('../db/dbCall');
+const { getCommentById, getCommentsByVideo, deleteComment, likeComment, updateComment } = require('../db/dbCall');
 const { commentschema, validateSchema } = require('../lib/validation');
 const { insertNewComment, getCommentPage } = require('../models/comments');
 
@@ -39,6 +39,31 @@ router.post('/', async (req, res, next) =>{
     }
 }
 );
+
+router.put('/:id', async (req,res, next) =>{
+    if (validateSchema(req.body, commentschema)){
+        try{
+            const com = req.params.id;
+            const updateSuccessful = await updateComment(com, req.body);
+            if(updateSuccessful){
+                res.status(200).send(
+                    "status: updateSuccessful"
+                )
+            }
+        }
+        catch (error){
+            console.log(error);
+            res.status(500).send({
+                err: "unable to update comments."
+            });   
+        }
+    }
+    else{
+        res.status(400).send({
+            error: "Request body invalid."
+        })
+    }
+});
 
 router.get('/:id', async (req, res, next) =>{
     const com = req.params.id;

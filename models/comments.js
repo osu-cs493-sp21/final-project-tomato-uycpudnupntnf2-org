@@ -1,5 +1,5 @@
 const { extractValidFields, commentschema } = require('../lib/validation');
-const { insertComment, getCommentById } = require('../db/dbCall');
+const { insertComment, getCommentById, getVideoById } = require('../db/dbCall');
 const { getDBReference } = require('../lib/mango');
 
 //page for comments just for debug may take this out later
@@ -24,8 +24,7 @@ exports.getCommentPage = async function (page){
 exports.insertNewComment = async function (comment){
     const commentToInsert = extractValidFields(comment, commentschema);
     const vidid = commentToInsert.videoid;
-    console.log("video id of new comment: ", vidid);
-
     const id = await insertComment(commentToInsert);
+    console.log("video id of new comment: ", vidid);
     return id;
 };
