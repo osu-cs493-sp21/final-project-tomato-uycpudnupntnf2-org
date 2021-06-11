@@ -1,12 +1,9 @@
 const router = require('express').Router();
-
 const { 
     videoschema, 
     validateSchema, 
     extractValidFields 
 } = require('../lib/validation')
-
-
 const { getVideoPage } = require('../models/videos')
 const { 
     getVideoById, 
@@ -15,7 +12,11 @@ const {
     deleteVideo,
     likeVideo
 } = require('../db/dbCall');
+
 const { ObjectID } = require('bson');
+
+const multer = require('multer');
+const upload = multer({ dest: `${__dirname}/../db/data/files`})
 
 exports.router = router
 
@@ -60,7 +61,7 @@ router.get('/:id', async (req, res, next) =>{
 
 
 // post video
-router.post('/', async (req, res, next) =>{
+router.post('/', upload.single("video") , async (req, res, next) =>{
     //console.log("req.body: ", req.body.likes);
   
     if(validateSchema(req.body, videoschema)){
