@@ -181,7 +181,7 @@ async function updateV(videoid,video)     {
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(videoid) },
 		{ $set:validdoc }
-	).toArray();
+	);
 	return result.result;
 }
 async function updateC(commentid,comment) {
@@ -191,7 +191,7 @@ async function updateC(commentid,comment) {
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(commentid) },
 		{ $set:validdoc }
-	).toArray();
+	);
 	return result.result;
 }
 async function updateU(userid,user)       {
@@ -201,7 +201,7 @@ async function updateU(userid,user)       {
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(userid) },
 		{ $set:validdoc }
-	).toArray();
+	);
 	return result.result;
 }
 async function subU   (userid,subid)      {
@@ -218,7 +218,7 @@ async function subU   (userid,subid)      {
 		const result = await collection.updateOne(
 			{ _id:new ObjectId(userid) },
 			{$set:{subs:user[0].subs}}
-		).toArray();
+		);
 		return result.result;
 	}
 	else {
@@ -242,7 +242,7 @@ async function usubU  (userid,subid)      {
 		const result = await collection.updateOne(
 			{ _id:new ObjectId(userid) },
 			{$set:{subs:user[0].subs}}
-		).toArray();
+		);
 		return result.result;
 	}
 	else {
