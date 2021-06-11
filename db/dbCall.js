@@ -297,28 +297,28 @@ async function likeC(id, fieldValue){
 // Delete functions
 // 3/3 complete
 // ************************************************************
-async function delU(videoid) {
+async function delU(userid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('users');
-	const result = await collection.updateOne({ 
-		_id:new ObjectId(videoid) 
-	}).toArray();
+	const result = await collection.deleteOne({ 
+		_id:new ObjectId(userid) 
+	});
 	return result.result;
 }
 async function delC(commentid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
-	const result = await collection.updateOne({ 
+	const result = await collection.deleteOne({ 
 		_id:new ObjectId(commentid)  
-	}).toArray();
+	});
 	return result.result;
 }
 async function delV(videoid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
-	const result = await collection.updateOne({ 
+	const result = await collection.deleteOne({ 
 		_id:new ObjectId(videoid)  
-	}).toArray();
+	});
 	return result.result;
 }
 async function deleteVideoById(id){
