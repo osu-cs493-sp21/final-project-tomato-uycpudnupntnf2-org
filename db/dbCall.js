@@ -237,7 +237,7 @@ async function usubU  (userid,subid)      {
 		}
 		const idx = user[0].subs.indexOf(subid);
 		if(idx > -1) {
-			user[0].subs.remove(idx);
+			user[0].subs.splice(idx,1);
 		}
 		const result = await collection.updateOne(
 			{ _id:new ObjectId(userid) },
