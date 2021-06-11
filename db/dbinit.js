@@ -1,4 +1,5 @@
 const mango  = require('../lib/mango');
+const { insertNewUser } = require('../models/user');
 const dbjson = require('./data/db.json');
 const dbcall = require('./dbCall');
 const print  = dbcall.print;
@@ -9,7 +10,7 @@ mango.connectToDB(async () => {
 	const dbvjson = dbjson.videos;
 	const dbcjson = dbjson.comments
 	for(c = 0;c < dbujson.length;c++) {
-		await dbcall.insertUser(dbujson[c]);
+		await insertNewUser(dbujson[c]);
 	}
 	const user = await dbcall.getUserByEmail("noelle@mail.com");
 	if(user) {
