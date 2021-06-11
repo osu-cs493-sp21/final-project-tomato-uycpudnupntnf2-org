@@ -52,7 +52,7 @@ async function insertC(comment) {
 async function insertV(video) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
-	video = val.extractValidFields(video,val.videoschema);
+	//video = val.extractValidFields(video,val.videoschema);
 	video._id = new ObjectId(await getVideoCount());
 	console.log(video._id);
 	const result = await collection.insertOne(video);
@@ -94,7 +94,7 @@ async function getVById(id) {
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: id
+			_id: ObjectID(id)
 		}).toArray();
 
 		return result[0];
@@ -209,7 +209,7 @@ async function subU   (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id = userid 
+			_id : userid
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
@@ -230,7 +230,7 @@ async function usubU  (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id = userid 
+			_id : userid 
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
