@@ -25,6 +25,7 @@ exports.insertNewComment = async function (comment){
     const commentToInsert = extractValidFields(comment, commentschema);
     const vidid = commentToInsert.videoid;
     console.log("video id of new comment: ", vidid);
+
     const id = await insertComment(commentToInsert);
     return id;
 };

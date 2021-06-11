@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getCommentById, getCommentsByVideo } = require('../db/dbCall');
+const { getCommentById, getCommentsByVideo, deleteComment } = require('../db/dbCall');
 const { commentschema, validateSchema } = require('../lib/validation');
 const { insertNewComment, getCommentPage } = require('../models/comments');
 
@@ -57,6 +57,26 @@ router.get('/:id', async (req, res, next) =>{
         console.log(" == ERROR: ", error);
         res.status(500).send({
             err: "Unable to fetch comment " + com
+        })
+    }
+}
+);
+
+router.delete('/:id', async (req, res, next) =>{
+    try{
+        const id = req.params.id;
+        const deleteSuccessful = await deleteComment(id);
+        if (deleteSuccessful){
+            res.status(200).send("Delete successful");
+        }
+        else{
+            next();
+        }
+    }
+    catch (error){
+        console.log(error);
+        res.status(500).send({
+            err: "Unable to delete comment from the DB."
         })
     }
 }
