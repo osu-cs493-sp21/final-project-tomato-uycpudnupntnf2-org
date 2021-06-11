@@ -334,6 +334,32 @@ async function deleteVideoById(id){
 }
 
 // ************************************************************
+// Added for comments functionality
+// ************************************************************
+async function addCtoV(commentid, videoid){
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	if(ObjectId.isValid(videoid)) {
+		const result = await collection.find({
+			_id: new ObjectId(videoid)
+		}).toArray();	
+		//if(result[0].comments) {
+			//fieldValue.likes = result[0].likes + parseInt(fieldValue.likes);
+		//const newComments = result[0].comments.push(commentid);
+		//console.log(newComments);
+		//const newResult = await collection.updateOne(
+			//{ _id: new ObjectID(videoid) },
+			//{ $set: fieldValue }
+		//);
+		//console.log(newResult)
+		//return newResult.matchedCount > 0;
+		return null;
+	}else{
+		return null;
+	}
+}
+
+// ************************************************************
 // The exports for all the db calls
 // 18/18 complete
 // ************************************************************
@@ -363,3 +389,5 @@ exports.deleteComment      = delC;        // delete a comment object from db
 exports.likeVideo          = likeVideo;   // modify like or dislike videos
 exports.likeComment        = likeC;
 exports.print              = console.log; // Because typing console.log is too long
+
+exports.addCommentToVideo  = addCtoV;

@@ -3,6 +3,7 @@ const { getCommentById, getCommentsByVideo, deleteComment, likeComment, updateCo
 const { commentschema, validateSchema } = require('../lib/validation');
 const { insertNewComment, getCommentPage } = require('../models/comments');
 
+//get all commments sitewide - not part of YT API but good for visualizing db contents
 router.get('/', async (req, res, next) => {
     try{
         const commentPage = await getCommentPage(parseInt(req.query.page) || 1);
@@ -19,6 +20,7 @@ router.get('/', async (req, res, next) => {
 }
 );
 
+//add a comment
 router.post('/', async (req, res, next) =>{
     if (validateSchema(req.body, commentschema)){
         try{
@@ -40,6 +42,7 @@ router.post('/', async (req, res, next) =>{
 }
 );
 
+//replace a comment - possibly part of YT API?
 router.put('/:id', async (req,res, next) =>{
     if (validateSchema(req.body, commentschema)){
         try{
@@ -65,6 +68,7 @@ router.put('/:id', async (req,res, next) =>{
     }
 });
 
+//get a specific comment
 router.get('/:id', async (req, res, next) =>{
     const com = req.params.id;
     console.log(" -- comment : ", com)
@@ -87,6 +91,7 @@ router.get('/:id', async (req, res, next) =>{
 }
 );
 
+//delete a comment
 router.delete('/:id', async (req, res, next) =>{
     try{
         const id = req.params.id;
@@ -107,6 +112,7 @@ router.delete('/:id', async (req, res, next) =>{
 }
 );
 
+//like or dislike a comment (must be increment of +/- 1)
 router.patch('/:id', async (req, res, next) =>{
     if ((req.body.likes) && ((req.body.likes == 1) || req.body.likes == -1)){
         try{
