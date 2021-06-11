@@ -6,8 +6,8 @@ router.use('/videos',require('./videos').router);
 // DELETE ME BEFORE FINAL SUBMISSION
 const dbcall = require('../db/dbCall');
 print = dbcall.print;
-router.get("/dbtest",async function(req,res,next) {
-	const result = await dbcall.getUserByEmail("noelle@mail.com");
+router.get("/dbtest/:id",async function(req,res,next) {
+	const result = await dbcall.getUserById(req.params.id);
 	print("email",result);
 	res.status(201).send({
 		note:"the query was completed!",
