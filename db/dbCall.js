@@ -35,7 +35,7 @@ async function insertU(user) {
 		user._id = new ObjectId(await getUserCount());
 		console.log(user._id);
 		const result = await collection.insertOne(user);
-		return result.result;
+		return user._id;
 	}
 	console.log({ "n":0, "ok":0 });
 	return { "n":0, "ok":0 };
@@ -73,7 +73,7 @@ async function getUById(id) {
 		const result = await collection.find({
 			_id: id
 		}).toArray();
-		console.log(result[0]._id);
+		console.log(result[0]);
 		return result[0];
 	}
 	else {
@@ -209,7 +209,7 @@ async function subU   (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id = userid 
+			_id: userid 
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
@@ -230,7 +230,7 @@ async function usubU  (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id = userid 
+			_id: userid 
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
