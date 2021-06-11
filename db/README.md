@@ -14,6 +14,7 @@ for the database. You can do this using the provided file:
 
 When you run this it will create a new docker container for: the mongodb
 a rabbitmq server, as well as a network to connect them together.
+Note from Deven: Added line in dbdockerinit to launch redis, if it fails then launch it manually by copypasting the last line
 The rabbitmq server is not necessary for this project, but it is there
 anyways.
 ### Creating your user;
