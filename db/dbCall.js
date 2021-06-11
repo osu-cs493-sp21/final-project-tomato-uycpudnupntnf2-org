@@ -209,11 +209,7 @@ async function subU   (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-<<<<<<< HEAD
-			_id: userid 
-=======
 			_id:new ObjectId(userid) 
->>>>>>> 4ea2a498af07de346628e602832e9d6d4529ffa5
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
@@ -234,11 +230,7 @@ async function usubU  (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-<<<<<<< HEAD
-			_id: userid 
-=======
 			_id:new ObjectId(userid) 
->>>>>>> 4ea2a498af07de346628e602832e9d6d4529ffa5
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
