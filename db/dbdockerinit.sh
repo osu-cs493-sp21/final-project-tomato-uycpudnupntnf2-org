@@ -9,4 +9,4 @@ docker run -d --name mongo-server    \
 -v assign4-vol:/data/db              \
 -e "MONGO_INITDB_ROOT_USERNAME=root" \
 -e "MONGO_INITDB_ROOT_PASSWORD=hunter2" mongo:latest
-  
+docker run -d --name redis-server -p 6379:6379 redis:latest
