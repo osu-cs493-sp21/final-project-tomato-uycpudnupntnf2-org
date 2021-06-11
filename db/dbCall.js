@@ -170,7 +170,7 @@ async function updateVideo(id, video){
 	videoValues = val.extractValidFields(video, val.videoschema);
 	const result = await collection.replaceOne(
 		{ _id: new ObjectID(id) },
-		videoValues
+		{ $set:videoValues }
 	);
 	return result.matchedCount > 0;
 }
@@ -180,7 +180,7 @@ async function updateV(videoid,video)     {
 	const validdoc = val.extractValidFields(video,val.videoschema);
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(videoid) },
-		validdoc
+		{ $set:validdoc }
 	).toArray();
 	return result.result;
 }
@@ -190,7 +190,7 @@ async function updateC(commentid,comment) {
 	const validdoc = val.extractValidFields(comment,val.commentschema);
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(commentid) },
-		validdoc
+		{ $set:validdoc }
 	).toArray();
 	return result.result;
 }
@@ -200,7 +200,7 @@ async function updateU(userid,user)       {
 	const validdoc = val.extractValidFields(user,val.userschema);
 	const result = await collection.updateOne(
 		{ _id:new ObjectId(userid) },
-		validdoc
+		{ $set:validdoc }
 	).toArray();
 	return result.result;
 }
