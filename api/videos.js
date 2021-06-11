@@ -91,7 +91,6 @@ router.get('/:id', async (req, res, next) =>{
         delete video.file
         delete video.thumnail
 
-
         if(video){
             res.status(200).send(video);
         }else{
