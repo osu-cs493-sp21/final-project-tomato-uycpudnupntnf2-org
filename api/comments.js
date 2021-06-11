@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { getCommentById, getCommentsByVideo, deleteComment, likeComment, updateComment } = require('../db/dbCall');
+const { requireAuthentication, checkUser, checkUserFromBody } = require('../lib/auth');
 const { commentschema, validateSchema } = require('../lib/validation');
 const { insertNewComment, getCommentPage } = require('../models/comments');
 
@@ -21,7 +22,8 @@ router.get('/', async (req, res, next) => {
 );
 
 //add a comment
-router.post('/', async (req, res, next) =>{
+router.post('/', requireAuthentication, checkUserFromBody, async (req, res, next) =>{
+    delete req.body._id;
     if (validateSchema(req.body, commentschema)){
         try{
             const id = await insertNewComment(req.body)
@@ -43,7 +45,8 @@ router.post('/', async (req, res, next) =>{
 );
 
 //replace a comment - possibly part of YT API?
-router.put('/:id', async (req,res, next) =>{
+router.put('/:id', requireAuthentication, checkUserFromBody, async (req,res, next) =>{
+    delete req.body._id;
     if (validateSchema(req.body, commentschema)){
         try{
             const com = req.params.id;
@@ -92,7 +95,8 @@ router.get('/:id', async (req, res, next) =>{
 );
 
 //delete a comment
-router.delete('/:id', async (req, res, next) =>{
+router.delete('/:id', requireAuthentication, checkUserFromBody, async (req, res, next) =>{
+    delete req.body._id;
     try{
         const id = req.params.id;
         const deleteSuccessful = await deleteComment(id);
