@@ -2,6 +2,7 @@ const router = module.exports = require('express').Router();
 
 router.use('/users', require('./users'));
 router.use('/videos',require('./videos').router);
+router.use('/comments',require('./comments'));
 
 // DELETE ME BEFORE FINAL SUBMISSION
 const dbcall = require('../db/dbCall');

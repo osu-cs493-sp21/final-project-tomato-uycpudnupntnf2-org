@@ -45,6 +45,7 @@ async function insertC(comment) {
 	const collection = db.collection('comments');
 	comment = val.extractValidFields(comment,val.commentschema);
 	comment._id = new ObjectId(await getCommentCount());
+	comment.likes = 0; //comments always initially have 0 likes
 	console.log(comment._id);
 	const result = await collection.insertOne(comment);
 	return result.result;
@@ -54,6 +55,7 @@ async function insertV(video) {
 	const collection = db.collection('videos');
 	video = val.extractValidFields(video,val.videoschema);
 	video._id = new ObjectId(await getVideoCount());
+	//video.comments = [];
 	console.log(video._id);
 	const result = await collection.insertOne(video);
 	//console.log("after insert:", result.result)
