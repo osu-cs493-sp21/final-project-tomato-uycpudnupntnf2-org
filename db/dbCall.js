@@ -35,7 +35,7 @@ async function insertU(user) {
 		user._id = new ObjectId(await getUserCount());
 		console.log(user._id);
 		const result = await collection.insertOne(user);
-		return result.result;
+		return user._id;
 	}
 	console.log({ "n":0, "ok":0 });
 	return { "n":0, "ok":0 };
@@ -71,9 +71,9 @@ async function getUById(id) {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: id
+			_id: new ObjectId(id)
 		}).toArray();
-		console.log(result[0]._id);
+		if(result[0]) console.log(result[0]._id);
 		return result[0];
 	}
 	else {
@@ -94,7 +94,7 @@ async function getVById(id) {
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: ObjectID(id)
+			_id: new ObjectId(id)
 		}).toArray();
 
 		return result[0];
@@ -108,7 +108,7 @@ async function getCById(id) {
 	const collection = db.collection('comments');
 	if(ObjectId.isValid(id)) {
 		const result = await collection.find({
-			_id: id
+			_id: new ObjectId(id)
 		}).toArray();
 		// console.log(result[0]);
 		return result[0];
@@ -126,7 +126,7 @@ async function getUV(userid) {
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(userid)) {
 		const result = await collection.find({
-			userid: userid
+			userid: new ObjectId(userid)
 		}).toArray();
 		return result;
 	}
@@ -139,7 +139,7 @@ async function getUC(userid) {
 	const collection = db.collection('comments');
 	if(ObjectId.isValid(userid)) {
 		const result = await collection.find({
-			userid: userid
+			userid: new ObjectId(userid)
 		}).toArray();
 		return result;
 	}
@@ -147,12 +147,12 @@ async function getUC(userid) {
 		return null;
 	}
 }
-async function getCByV(videoid) {
+async function getCByV(commentid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
 	if(ObjectId.isValid(videoid)) {
 		const result = await collection.find({
-			videoid: videoid
+			videoid: new ObjectId(commentid)
 		}).toArray();
 		return result;
 	}
@@ -170,7 +170,7 @@ async function updateVideo(id, video){
 	videoValues = val.extractValidFields(video, val.videoschema);
 	const result = await collection.replaceOne(
 		{ _id: new ObjectID(id) },
-		videoValues
+		{ $set:videoValues }
 	);
 	return result.matchedCount > 0;
 }
@@ -179,9 +179,9 @@ async function updateV(videoid,video)     {
 	const collection = db.collection('videos');
 	const validdoc = val.extractValidFields(video,val.videoschema);
 	const result = await collection.updateOne(
-		{ _id:videoid },
-		validdoc
-	).toArray();
+		{ _id:new ObjectId(videoid) },
+		{ $set:validdoc }
+	);
 	return result.result;
 }
 async function updateC(commentid,comment) {
@@ -189,9 +189,9 @@ async function updateC(commentid,comment) {
 	const collection = db.collection('comments');
 	const validdoc = val.extractValidFields(comment,val.commentschema);
 	const result = await collection.updateOne(
-		{ _id:commentid },
-		validdoc
-	).toArray();
+		{ _id:new ObjectId(commentid) },
+		{ $set:validdoc }
+	);
 	return result.result;
 }
 async function updateU(userid,user)       {
@@ -199,9 +199,9 @@ async function updateU(userid,user)       {
 	const collection = db.collection('users');
 	const validdoc = val.extractValidFields(user,val.userschema);
 	const result = await collection.updateOne(
-		{ _id:userid },
-		validdoc
-	).toArray();
+		{ _id:new ObjectId(userid) },
+		{ $set:validdoc }
+	);
 	return result.result;
 }
 async function subU   (userid,subid)      {
@@ -209,16 +209,16 @@ async function subU   (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id : userid
+			_id:new ObjectId(userid) 
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
 		}
 		user[0].subs.push(subid);
 		const result = await collection.updateOne(
-			{ _id:userid },
+			{ _id:new ObjectId(userid) },
 			{$set:{subs:user[0].subs}}
-		).toArray();
+		);
 		return result.result;
 	}
 	else {
@@ -230,19 +230,19 @@ async function usubU  (userid,subid)      {
 	const collection = db.collection('users');
 	if(ObjectId.isValid(userid)) {
 		const user = await collection.find({ 
-			_id : userid 
+			_id:new ObjectId(userid) 
 		}).toArray();
 		if(!user[0].subs) {
 			user[0].subs = [];
 		}
 		const idx = user[0].subs.indexOf(subid);
 		if(idx > -1) {
-			user[0].subs.remove(idx);
+			user[0].subs.splice(idx,1);
 		}
 		const result = await collection.updateOne(
-			{ _id:userid },
+			{ _id:new ObjectId(userid) },
 			{$set:{subs:user[0].subs}}
-		).toArray();
+		);
 		return result.result;
 	}
 	else {
@@ -300,25 +300,25 @@ async function likeC(id, fieldValue){
 async function delU(userid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('users');
-	const result = await collection.updateOne({ 
-		_id:videoid 
-	}).toArray();
+	const result = await collection.deleteOne({ 
+		_id:new ObjectId(userid) 
+	});
 	return result.result;
 }
 async function delC(commentid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('comments');
-	const result = await collection.updateOne({ 
-		_id:videoid 
-	}).toArray();
+	const result = await collection.deleteOne({ 
+		_id:new ObjectId(commentid)  
+	});
 	return result.result;
 }
 async function delV(videoid) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
-	const result = await collection.updateOne({ 
-		_id:videoid 
-	}).toArray();
+	const result = await collection.deleteOne({ 
+		_id:new ObjectId(videoid)  
+	});
 	return result.result;
 }
 async function deleteVideoById(id){

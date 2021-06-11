@@ -1,4 +1,4 @@
-const { getUserByEmail } = require('../db/dbCall');
+const { getUserByEmail, getUserById, deleteUser, getUserComments, updateUser, getUserVideos, subUser, unsubUser } = require('../db/dbCall');
 const { generateAuthToken, requireAuthentication, checkUser } = require('../lib/auth');
 const { userschema, validateSchema } = require('../lib/validation');
 const { insertNewUser, validateUser } = require('../models/user');
@@ -63,5 +63,156 @@ router.post('/login', async (req, res, next) => {
     }
   });
 
+  router.put('/:id', requireAuthentication, checkUser, async (req, res, next) => {
+
+    if(validateSchema(req.body, userschema)){
+    try {
+      const user = await updateUser(req.params.id, req.body);
+      if (user) {
+        res.status(204).end()
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  } else {
+    res.status(400).send({
+      error: "Request needs to be a user object."
+    });
+  }
+  })
+
+  router.get('/:id', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      console.log(req.params.id)
+      var user = await getUserById(req.params.id);
+      delete user.pass
+      if (user) {
+        res.status(200).send({ user: user });
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+
+  router.delete('/:id', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await deleteUser(req.params.id);
+      if (user) {
+        res.status(204).end()
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+
+  router.get('/:id/subscriptions', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await getUserById(req.params.id);
+      if (user) {
+        res.status(200).send({ subscriptions: user.subs });
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+
+  router.get('/:id/comments', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await getUserComments(req.params.id);
+      if (user) {
+        res.status(200).send({ user: user });
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+  router.get('/:id/videos', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await getUserVideos(req.params.id);
+      if (user) {
+        res.status(200).send({ userVids: user.vids });
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+
+  //Need to check if the subid exists
+  router.post('/:id/subscribe/:subid', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await getUserById(req.params.id);
+      const subuser = await getUserById(req.params.subid);
+      if(!subuser){ 
+        res.status(500).send({
+          error: "The user you want to subscribe to does not exist."
+        });
+      }
+      if (user) {
+        const result = await subUser(req.params.id, req.params.subid);
+        res.status(204).end();
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+
+  router.post('/:id/unsubscribe/:subid', requireAuthentication, checkUser, async (req, res, next) => {
+    try {
+      const user = await getUserById(req.params.id);
+      const subuser = await getUserById(req.params.subid);
+      if(!subuser){ 
+        res.status(500).send({
+          error: "The user you want to subscribe to does not exist."
+        });
+      }
+      if (user) {
+        const result = await unsubUser(req.params.id, req.params.subid);
+        res.status(204).end();
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: "Unable to fetch the user.  Please try again later."
+      });
+    }
+  })
+  
   
 module.exports = router;
