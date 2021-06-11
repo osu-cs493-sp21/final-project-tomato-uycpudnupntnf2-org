@@ -45,7 +45,11 @@ async function insertC(comment) {
 	const collection = db.collection('comments');
 	comment = val.extractValidFields(comment,val.commentschema);
 	comment._id = new ObjectId(await getCommentCount());
+	comment.likes = 0; //comments always initially have 0 likes
 	console.log(comment._id);
+	const vidid = comment.videoid;
+	const vid = await getVById(vidid);
+    await addCtoV(comment._id, vidid, vid);
 	const result = await collection.insertOne(comment);
 	return result.result;
 }
@@ -54,6 +58,8 @@ async function insertV(video) {
 	const collection = db.collection('videos');
 	//video = val.extractValidFields(video,val.videoschema);
 	video._id = new ObjectId(await getVideoCount());
+	video.comments = [];
+	video.likes = 0;
 	console.log(video._id);
 	const result = await collection.insertOne(video);
 	//console.log("after insert:", result.result)
@@ -331,6 +337,30 @@ async function deleteVideoById(id){
 }
 
 // ************************************************************
+// Added for comments functionality, adds comment to video's comment array
+// ************************************************************
+async function addCtoV(commentid, videoid, vid){
+	const db = mango.getDBReference();
+	const collection = db.collection('videos');
+	if(ObjectId.isValid(videoid)) {
+		const result = await collection.find({
+			_id: new ObjectId(videoid)
+		}).toArray();	
+		const newComments = result[0].comments.push(commentid);
+		console.log(result[0].comments);
+		vid.comments = result[0].comments;
+		const newResult = await collection.updateOne(
+			{ _id: new ObjectID(videoid) },
+			{ $set: vid }
+		);
+		return null;
+	}
+	else{
+		return null;
+	}
+}
+
+// ************************************************************
 // The exports for all the db calls
 // 18/18 complete
 // ************************************************************
@@ -358,4 +388,7 @@ exports.deleteVideo        = deleteVideoById; // delete a video object from db
 exports.deleteComment      = delC;        // delete a comment object from db
 
 exports.likeVideo          = likeVideo;   // modify like or dislike videos
+exports.likeComment        = likeC;
 exports.print              = console.log; // Because typing console.log is too long
+
+exports.addCommentToVideo  = addCtoV;
