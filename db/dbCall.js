@@ -55,7 +55,8 @@ async function insertV(video) {
 	const collection = db.collection('videos');
 	video = val.extractValidFields(video,val.videoschema);
 	video._id = new ObjectId(await getVideoCount());
-	//video.comments = [];
+	video.comments = [];
+	video.likes = 0;
 	console.log(video._id);
 	const result = await collection.insertOne(video);
 	//console.log("after insert:", result.result)
