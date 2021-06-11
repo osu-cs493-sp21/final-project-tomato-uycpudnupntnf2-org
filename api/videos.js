@@ -59,13 +59,17 @@ exports.router = router
 // get all videos with pagination
 router.get('/', async (req, res, next) => {
     try {
-        const videoPage = await getVideoPage(parseInt(req.query.page) || 1);
-        array.forEach(element => {
-            
+        var videoPage = await getVideoPage(parseInt(req.query.page) || 1);
+        var videos = videoPage.videos
+
+        //console.log(videos)
+        
+        Object.keys(videos).forEach(key => {
+            console.log("key: ", videos[key]);
+            delete videos[key].thumnail;
+            delete videos[key].file;
         });
         
-        delete videoPage.file
-        delete videoPage.thumnail
         res.status(200).send({
             videoPage
         });
@@ -86,7 +90,7 @@ router.get('/:id', async (req, res, next) =>{
         
         delete video.file
         delete video.thumnail
-        
+
 
         if(video){
             res.status(200).send(video);
@@ -101,8 +105,6 @@ router.get('/:id', async (req, res, next) =>{
     }
 })
 
-// , uploadThumnail.array('image')
-// upload.array('video')
 // post video
 router.post('/', upload.any(), async (req, res, next) =>{
   
@@ -123,7 +125,7 @@ router.post('/', upload.any(), async (req, res, next) =>{
             req.body.thumnail = `${__dirname}/../db/data/files/videos/`  + req.files[1].filename
             req.body.length = parseInt(req.body.length);
             req.body.likes = parseInt(req.body.likes)
-            
+            req.body.url = "/media/video/" + req.body.filename
             console.log(req.body)
             
             const result = await insertVideo(req.body);
