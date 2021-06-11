@@ -52,7 +52,7 @@ async function insertC(comment) {
 async function insertV(video) {
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
-	video = val.extractValidFields(video,val.videoschema);
+	//video = val.extractValidFields(video,val.videoschema);
 	video._id = new ObjectId(await getVideoCount());
 	console.log(video._id);
 	const result = await collection.insertOne(video);

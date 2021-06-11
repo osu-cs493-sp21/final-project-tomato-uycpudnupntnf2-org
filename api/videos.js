@@ -1,4 +1,8 @@
 const router = require('express').Router();
+const express = require("express");
+const app = express();
+router.use('/media/video' ,express.static(`${__dirname}/../db/data/files/videos`))
+
 const { 
     videoschema, 
     validateSchema, 
@@ -16,14 +20,56 @@ const {
 const { ObjectID } = require('bson');
 
 const multer = require('multer');
-const upload = multer({ dest: `${__dirname}/../db/data/files`})
+const crypto = require('crypto');
+
+//const upload = multer({ dest: `${__dirname}/../db/data/files`})
+
+const acceptedFileTypes={
+  'video/mp4': 'mp4',
+  'video/mov': 'mov',
+  'video/wmv': 'wmv',
+  'video/flv': 'flv',
+  'video/avi': 'avi',
+  'video/jpeg': 'jpg',
+  'video/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+};
+
+
+
+const upload = multer({
+
+  storage: multer.diskStorage({
+    destination: `${__dirname}/../db/data/files/videos`,
+    filename: (req, file, callback) => {
+      const filename = crypto.pseudoRandomBytes(16).toString('hex');
+      const extension = acceptedFileTypes[file.mimetype];
+      callback(null, `${filename}.${extension}`);
+    }
+  }),
+  fileFilter: (req, file, callback) => {
+      callback(null, !!acceptedFileTypes[file.mimetype])
+    }
+});
+
 
 exports.router = router
 
 // get all videos with pagination
 router.get('/', async (req, res, next) => {
     try {
-        const videoPage = await getVideoPage(parseInt(req.query.page) || 1);
+        var videoPage = await getVideoPage(parseInt(req.query.page) || 1);
+        var videos = videoPage.videos
+
+        //console.log(videos)
+        
+        Object.keys(videos).forEach(key => {
+            console.log("key: ", videos[key]);
+            delete videos[key].thumnail;
+            delete videos[key].file;
+        });
+        
         res.status(200).send({
             videoPage
         });
@@ -37,14 +83,15 @@ router.get('/', async (req, res, next) => {
 
 // get video by video id
 router.get('/:id', async (req, res, next) =>{
-    // console.log(" == timestamp: " , (new Date(Date.now()).toString()))
-    // requested id
-    const vid = req.params.id;
-    console.log(" -- vid: " , vid)
 
+    const vid = req.params.id;
     try {
         const video = await getVideoById(vid);
-        console.log(' -- video from db: ', video)
+        
+        delete video.file
+        delete video.thumnail
+
+
         if(video){
             res.status(200).send(video);
         }else{
@@ -58,16 +105,29 @@ router.get('/:id', async (req, res, next) =>{
     }
 })
 
-
-
 // post video
-router.post('/', upload.single("video") , async (req, res, next) =>{
-    //console.log("req.body: ", req.body.likes);
+router.post('/', upload.any(), async (req, res, next) =>{
   
-    if(validateSchema(req.body, videoschema)){
+    
+    //console.log("req file: ", req.file)
+    console.log("req files: ", req.files)
+    console.log(" req body", req.body)
+
+    if(validateSchema(req.body, videoschema) && req.files){
         try {
-            //req.body.likes = parseInt(req.body.likes);
+            // timestamp for video
+
+            req.body.filename = req.files[0].filename
+            req.body.contentType = req.files[0].mimetype;
             req.body.timestamp = Date.now();
+
+            req.body.file = `${__dirname}/../db/data/files/videos/`  + req.files[0].filename
+            req.body.thumnail = `${__dirname}/../db/data/files/videos/`  + req.files[1].filename
+            req.body.length = parseInt(req.body.length);
+            req.body.likes = parseInt(req.body.likes)
+            req.body.url = "/media/video/" + req.body.filename
+            console.log(req.body)
+            
             const result = await insertVideo(req.body);
             res.status(200).send({
                 result: result.result,
@@ -155,3 +215,10 @@ router.patch('/:id', async (req, res, next) => {
         })
     }
 })
+
+router.use('*', (err, req, res, next) => {
+  console.error(err);
+  res.status(500).send({
+    error: "An error occurred.  Try again later."
+  });
+});
