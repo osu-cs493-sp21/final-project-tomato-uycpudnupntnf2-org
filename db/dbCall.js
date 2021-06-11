@@ -47,6 +47,9 @@ async function insertC(comment) {
 	comment._id = new ObjectId(await getCommentCount());
 	comment.likes = 0; //comments always initially have 0 likes
 	console.log(comment._id);
+	const vidid = comment.videoid;
+	const vid = await getVById(vidid);
+    await addCtoV(comment._id, vidid, vid);
 	const result = await collection.insertOne(comment);
 	return result.result;
 }
@@ -334,27 +337,25 @@ async function deleteVideoById(id){
 }
 
 // ************************************************************
-// Added for comments functionality
+// Added for comments functionality, adds comment to video's comment array
 // ************************************************************
-async function addCtoV(commentid, videoid){
+async function addCtoV(commentid, videoid, vid){
 	const db = mango.getDBReference();
 	const collection = db.collection('videos');
 	if(ObjectId.isValid(videoid)) {
 		const result = await collection.find({
 			_id: new ObjectId(videoid)
 		}).toArray();	
-		//if(result[0].comments) {
-			//fieldValue.likes = result[0].likes + parseInt(fieldValue.likes);
-		//const newComments = result[0].comments.push(commentid);
-		//console.log(newComments);
-		//const newResult = await collection.updateOne(
-			//{ _id: new ObjectID(videoid) },
-			//{ $set: fieldValue }
-		//);
-		//console.log(newResult)
-		//return newResult.matchedCount > 0;
+		const newComments = result[0].comments.push(commentid);
+		console.log(result[0].comments);
+		vid.comments = result[0].comments;
+		const newResult = await collection.updateOne(
+			{ _id: new ObjectID(videoid) },
+			{ $set: vid }
+		);
 		return null;
-	}else{
+	}
+	else{
 		return null;
 	}
 }

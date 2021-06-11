@@ -24,8 +24,5 @@ exports.getCommentPage = async function (page){
 exports.insertNewComment = async function (comment){
     const commentToInsert = extractValidFields(comment, commentschema);
     const id = await insertComment(commentToInsert);
-    const vidid = commentToInsert.videoid;
-    console.log("video id of new comment: ", vidid);
-    await addCommentToVideo(id, vidid);
     return id;
 };
