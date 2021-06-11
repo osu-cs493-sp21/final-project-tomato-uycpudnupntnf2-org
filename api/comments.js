@@ -22,7 +22,7 @@ router.get('/', async (req, res, next) => {
 );
 
 //add a comment
-router.post('/', requireAuthentication, checkUserFromBody, async (req, res, next) =>{
+router.post('/', async (req, res, next) =>{
     delete req.body._id;
     if (validateSchema(req.body, commentschema)){
         try{
@@ -45,7 +45,7 @@ router.post('/', requireAuthentication, checkUserFromBody, async (req, res, next
 );
 
 //replace a comment - possibly part of YT API?
-router.put('/:id', requireAuthentication, checkUserFromBody, async (req,res, next) =>{
+router.put('/:id', async (req,res, next) =>{
     delete req.body._id;
     if (validateSchema(req.body, commentschema)){
         try{
@@ -95,7 +95,7 @@ router.get('/:id', async (req, res, next) =>{
 );
 
 //delete a comment
-router.delete('/:id', requireAuthentication, checkUserFromBody, async (req, res, next) =>{
+router.delete('/:id', async (req, res, next) =>{
     delete req.body._id;
     try{
         const id = req.params.id;
