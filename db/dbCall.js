@@ -35,7 +35,7 @@ async function insertU(user) {
 		user._id = new ObjectId(await getUserCount());
 		console.log(user._id);
 		const result = await collection.insertOne(user);
-		return result.result;
+		return user._id;
 	}
 	console.log({ "n":0, "ok":0 });
 	return { "n":0, "ok":0 };
