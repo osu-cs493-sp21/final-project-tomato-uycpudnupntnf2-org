@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getCommentById, getCommentsByVideo, deleteComment } = require('../db/dbCall');
+const { getCommentById, getCommentsByVideo, deleteComment, likeComment } = require('../db/dbCall');
 const { commentschema, validateSchema } = require('../lib/validation');
 const { insertNewComment, getCommentPage } = require('../models/comments');
 
@@ -77,6 +77,30 @@ router.delete('/:id', async (req, res, next) =>{
         console.log(error);
         res.status(500).send({
             err: "Unable to delete comment from the DB."
+        })
+    }
+}
+);
+
+router.patch('/:id', async (req, res, next) =>{
+    if ((req.body.likes) && ((req.body.likes == 1) || req.body.likes == -1)){
+        try{
+            const id = req.params.id;
+            const updateSuccessful = await likeComment(id, req.body);
+            if (updateSuccessful){
+                res.status(200).send("update likes successful");
+            }
+        }
+        catch (error){
+            console.log(error);
+            res.status(500).send({
+                err: "unable to update likes in DB"
+            })
+        }
+    }
+    else{
+        res.status(400).send({
+            err: "Request body invalid for like/dislike"
         })
     }
 }

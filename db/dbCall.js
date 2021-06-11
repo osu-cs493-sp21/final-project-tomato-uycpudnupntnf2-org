@@ -360,4 +360,5 @@ exports.deleteVideo        = deleteVideoById; // delete a video object from db
 exports.deleteComment      = delC;        // delete a comment object from db
 
 exports.likeVideo          = likeVideo;   // modify like or dislike videos
+exports.likeComment        = likeC;
 exports.print              = console.log; // Because typing console.log is too long
